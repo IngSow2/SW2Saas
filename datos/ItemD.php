@@ -1,132 +1,158 @@
-<?php
+<?php 
+	require_once("../conexion/conexion.php");
+	class ItemD{
+		
+		var $idProyecto;
+		var $idActividad;
+		var $cantidad;
+		var $pParcial;
+		var $conexion;
+	//var $m_conexion;
 
+		public function __construct(){
+			$this->idProyecto="";
+			$this->idActividad="";
+			$this->cantidad=0;
+			$this->pParcial=0;
+			$this->conexion=conexion::getConexion();
+		}
 
-/**
- * @author Jc
- * @version 1.0
- * @created 21-jun-2016 08:10:33 p.m.
- */
-class ItemD
-{
+		public function getIdProyecto(){
+			return $this->idProyecto;
+		}
 
-	var $cantidad;
-	var $conexion;
-	var $idActividad;
-	var $idProyecto;
-	var $pParcial;
+		public function setIdProyecto($idProyecto){
+			$this->idProyecto=$idProyecto;
+		}
 
-	function ItemD()
-	{
-	}
+		public function getIdActividad(){
+			return $this->idActividad;
+		}
 
+		public function setIdActividad($idActividad){
+			$this->idActividad=$idActividad;
+		}
 
+		public function getCantidad(){
+			return $this->cantidad;
+		}
 
-	/**
-	 * var $m_conexion;
-	 */
-	function __construct()
-	{
-	}
+		public function setCantidad($cantidad){
+			$this->cantidad=$cantidad;
+		}
 
-	function getCantidad()
-	{
-	}
+		public function getPParcial(){
+			return $this->pParcial;
+		}
 
-	/**
-	 * 
-	 * @param idItem
-	 */
-	function getFechaF_idItem($idItem)
-	{
-	}
+		public function setPParcial($pParcial){
+			$this->pParcial=$pParcial;
+		}
 
-	/**
-	 * 
-	 * @param idItem
-	 */
-	function getFechaI_idItem($idItem)
-	{
-	}
+		public function guardar($actividad,$idProyecto){
+			$this->setIdActividad($actividad);
+			$this->setIdProyecto($idProyecto);
+			return $idItem=$this->guardar1();
+		}
 
-	function getIdActividad()
-	{
-	}
+		public function guardar1(){
+			$query='insert into item values (null,"'
+				.$this->getIdProyecto().'","'
+				.$this->getIdActividad().'","'
+				.$this->getCantidad().'","'
+				.$this->getPParcial().'");';
+			$this->conexion->consulta($query);
+			//$resultado=mysql_query($query);
+			return $idItem=$this->obtenerUltimoId();
+		}
 
-	function getIdProyecto()
-	{
-	}
+		public function obtenerUltimoId(){
+			$query='Select * from item order by id desc limit 1';
+			$resultado=$this->conexion->consulta($query);
+			//$resultado=mysql_query($query);
+			$items=array();
+			if($resultado!=NULL){
+				if(mysql_fetch_row($resultado)>0){
+					$i=0;
+					$resultado=$this->conexion->consulta($query);
+					//$resultado=mysql_query($query);
+					while ($res=mysql_fetch_array($resultado)) {
+						$items[$i]=array('id'=>$res['id'],'idProyecto'=>$res['idProyecto'],'idActividad'=>$res['idActividad'],'cantidad'=>$res['cantidad'],'PParcial'=>$res['PParcial']);
+						$i=$i+1;
+					}
+				}
+			}
+			return $items[0]['id'];
+		}
 
-	function getPParcial()
-	{
-	}
+		public function listarItem_IdProyecto($idProyecto){
+			$query='select * from item where idProyecto='.$idProyecto;
+			$resultado=$this->conexion->consulta($query);
+			//$resultado=mysql_query($query);
+			$items=array();
+			if($resultado!=NULL){
+				if(mysql_fetch_row($resultado)>0){
+					$i=0;
+					$resultado=$this->conexion->consulta($query);
+					//$resultado=mysql_query($query);
+					while ($res=mysql_fetch_array($resultado)) {
+						$items[$i]=array('id'=>$res['id'],'idProyecto'=>$res['idProyecto'],'idActividad'=>$res['idActividad'],'cantidad'=>$res['cantidad'],'PParcial'=>$res['PParcial']);
+						$i=$i+1;
+					}
+				}
+			}
+			return $items;
+		}
 
-	/**
-	 * 
-	 * @param actividad
-	 * @param idProyecto
-	 */
-	function guardar($actividad, $idProyecto)
-	{
-	}
+		public function guardarDiagrama($idItem,$predecesor,$fechaIni,$fechaFin){
+			$query='insert into diagrama values (null,'
+				.$idItem.','
+				.$predecesor.',"'
+				.$fechaIni.'","'
+				.$fechaFin.'");';
+			$this->conexion->consulta($query);
+			//$resultado=mysql_query($query);
+		}
 
-	function guardar1()
-	{
-	}
+		public function getFechaI_idItem($idItem){
+			$query='select * from diagrama where idItem='.$idItem;
+			$resultado=$this->conexion->consulta($query);
+			//$resultado=mysql_query($query);
+			$items=array();
+			if($resultado!=NULL){
+				if(mysql_fetch_row($resultado)>0){
+					$i=0;
+					$resultado=$this->conexion->consulta($query);
+					//$resultado=mysql_query($query);
+					while ($res=mysql_fetch_array($resultado)) {
+						$items[$i]=array('id'=>$res['id'],'idItem'=>$res['idItem'],'predecesor'=>$res['predecesor'],'fechaIni'=>$res['fechaIni'],'fechaFin'=>$res['fechaFin']);
+						$i=$i+1;
+					}
+				}
+			}
+			return $items[0]['fechaIni'];
+		}
 
-	/**
-	 * 
-	 * @param idItem
-	 * @param predecesor
-	 * @param fechaIni
-	 * @param fechaFin
-	 */
-	function guardarDiagrama($idItem, $predecesor, $fechaIni, $fechaFin)
-	{
-	}
+		public function getFechaF_idItem($idItem){
+			$query='select * from diagrama where idItem='.$idItem;
+			$resultado=$this->conexion->consulta($query);
+			//$resultado=mysql_query($query);
+			$items=array();
+			if($resultado!=NULL){
+				if(mysql_fetch_row($resultado)>0){
+					$i=0;
+					$resultado=$this->conexion->consulta($query);
+					//$resultado=mysql_query($query);
+					while ($res=mysql_fetch_array($resultado)) {
+						$items[$i]=array('id'=>$res['id'],'idItem'=>$res['idItem'],'predecesor'=>$res['predecesor'],'fechaIni'=>$res['fechaIni'],'fechaFin'=>$res['fechaFin']);
+						$i=$i+1;
+					}
+				}
+			}
+			return $items[0]['fechaFin'];
+		}
 
-	/**
-	 * 
-	 * @param idProyecto
-	 */
-	function listarItem_IdProyecto($idProyecto)
-	{
-	}
+	
 
-	function obtenerUltimoId()
-	{
-	}
-
-	/**
-	 * 
-	 * @param cantidad
-	 */
-	function setCantidad($cantidad)
-	{
-	}
-
-	/**
-	 * 
-	 * @param idActividad
-	 */
-	function setIdActividad($idActividad)
-	{
-	}
-
-	/**
-	 * 
-	 * @param idProyecto
-	 */
-	function setIdProyecto($idProyecto)
-	{
-	}
-
-	/**
-	 * 
-	 * @param pParcial
-	 */
-	function setPParcial($pParcial)
-	{
-	}
-
-}
-?>
+	};
+ ?>

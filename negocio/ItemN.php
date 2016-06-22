@@ -1,78 +1,51 @@
-<?php
+<?php 
+	require_once("../datos/itemD.php");
+	require_once("../negocio/actividadN.php");
+	class ItemN{
+
+		private $itemD;
+		private $actividadN;
+
+		public function __construct(){
+			$this->itemD = new ItemD(); 
+			//$this->actividadN = new ActividadN();
+		}
+
+		public function guardarItem($actividad,$idProyecto){
+			return $idItem=$this->itemD->guardar($actividad,$idProyecto);
+		}
+
+		public function listaItem_IdProyecto($idProyecto){
+			$lista=$this->itemD->listarItem_IdProyecto($idProyecto);
+			return $lista;
+		}
+
+		public function guardarDiagrama($idItem,$predecesor,$fechaIni,$fechaFin){
+			$this->itemD->guardarDiagrama($idItem,$predecesor,$fechaIni,$fechaFin);
+		}
+
+		public function getFechaI($idItem){
+			$fecha1=$this->itemD->getFechaI_idItem($idItem);
+			//$fecha2=''.substr($fecha1, 6, 4).','.substr($fecha1, 3, 2).','.substr($fecha1, 0, 2).'';
+			return str_replace("-", ",", $fecha1);
+		}
+
+		public function getFechaF($idItem){
+			$fecha1=$this->itemD->getFechaF_idItem($idItem);
+			//$fecha2=''.substr($fecha1, 6, 4).','.substr($fecha1, 3, 2).','.substr($fecha1, 0, 2).'';
+			return str_replace("-", ",", $fecha1);
+		}
+
+		public function obtenerNombre_IdActividad($idActividad){
+			$actividadN=new ActividadN();
+			return $actividadN->obtenerNombre_IdActividad($idActividad);
+		}
+
+	};
 
 
-/**
- * @author Jc
- * @version 1.0
- * @created 21-jun-2016 08:10:33 p.m.
- */
-class ItemN
-{
+	
+	
+	
 
-	var $actividadN;
-	var $itemD;
-
-	function ItemN()
-	{
-	}
-
-
-
-	function __construct()
-	{
-	}
-
-	/**
-	 * 
-	 * @param idItem
-	 */
-	function getFechaF($idItem)
-	{
-	}
-
-	/**
-	 * 
-	 * @param idItem
-	 */
-	function getFechaI($idItem)
-	{
-	}
-
-	/**
-	 * 
-	 * @param idItem
-	 * @param predecesor
-	 * @param fechaIni
-	 * @param fechaFin
-	 */
-	function guardarDiagrama($idItem, $predecesor, $fechaIni, $fechaFin)
-	{
-	}
-
-	/**
-	 * 
-	 * @param actividad
-	 * @param idProyecto
-	 */
-	function guardarItem($actividad, $idProyecto)
-	{
-	}
-
-	/**
-	 * 
-	 * @param idProyecto
-	 */
-	function listaItem_IdProyecto($idProyecto)
-	{
-	}
-
-	/**
-	 * 
-	 * @param idActividad
-	 */
-	function obtenerNombre_IdActividad($idActividad)
-	{
-	}
-
-}
 ?>

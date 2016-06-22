@@ -1,44 +1,48 @@
-<?php
+<?php 
+	require_once("../negocio/actividadN.php");
+	
+		class ActividadP{
 
+			private $actividadN;
+			private $itemN;
 
-/**
- * @author Jc
- * @version 1.0
- * @created 21-jun-2016 08:10:33 p.m.
- */
-class ActividadP
-{
+			public function __construct(){
+				$this->actividadN = new ActividadN(); 
+			}
 
-	var $actividadN;
-	var $itemN;
+			public function listarActividades($id_proyecto){
+				echo '<table id="actividades" class="table">
+					<tr>
+						<th>nombre de la actividad</th>		
+						<th>ver analisis de precio unitario</th>
+					</tr>';
+							$items=$this->actividadN->listaItem_IdProyecto($id_proyecto);
+							foreach ($items as $item) {
+								echo '<tr>';
+								echo '<td>'.$this->actividadN->obtenerNombre_IdActividad($item['idActividad']).'</td>';
+								echo '<td><a href="#"> ingresar </a></td>';
+								echo '</tr>';
+							}
+						
+				echo '</table>';
+			}
 
-	function ActividadP()
-	{
+			public function insertarActividad($nombre,$tipo,$unidad){
+				$this->actividadN->guardarActividad($nombre,$tipo,$unidad);
+			}
+
+		}
+
+	if(isset($_POST['crearActividadP'])){
+		if($_POST['crearActividadP']=="crear"){
+			$actividad=new ActividadP();
+			$actividad->insertarActividad($_POST['nombre'],$_POST['tipo'],$_POST['unidad']);
+			echo"<script type=\"text/javascript\">alert('ingresado correctamente'); window.location='../presentacion/crearActividadP.php';</script>";  
+		}else{
+			//echo "no creo actividad";
+		}
+	}else{
+		//echo "no isset";
 	}
 
-
-
-	function __construct()
-	{
-	}
-
-	/**
-	 * 
-	 * @param nombre
-	 * @param tipo
-	 * @param unidad
-	 */
-	function insertarActividad($nombre, $tipo, $unidad)
-	{
-	}
-
-	/**
-	 * 
-	 * @param id_proyecto
-	 */
-	function listarActividades($id_proyecto)
-	{
-	}
-
-}
-?>
+ ?>

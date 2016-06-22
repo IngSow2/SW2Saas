@@ -1,57 +1,45 @@
-<?php
+<?php 
+	
+	class conexion{
 
-
-/**
- * @author Jc
- * @version 1.0
- * @created 21-jun-2016 08:10:33 p.m.
- */
-class conexion
-{
-
+		var $con=NULL;
+		private static $conexion;
 	var $animal;
-	var $con = NULL;
-	static var $conexion;
 
-	function conexion()
-	{
-	}
+		public function __construct(){
+			$this->con=mysql_connect("localhost","root");
+			mysql_select_db("constructorasaas",$this->con);
+		}
+
+		public static function getConexion(){
+			if (  !self::$conexion instanceof self){
+		        self::$conexion = new self;
+		    }
+		    return self::$conexion;
+		    
+		}
+
+		public function consulta($query){
+			return $q = mysql_query($query,$this->con);
+		}
+
+		public function cerrar(){
+			$this->con->mysql_close();
+		}
 
 
 
-	function __construct()
-	{
-	}
 
-	function cerrar()
-	{
-	}
+	
 
-	/**
-	 * 
-	 * @param query
-	 */
-	function consulta($query)
-	{
-	}
-
-	function getanimal()
-	{
-		return $this->animal;
-	}
-
-	static function getConexion()
-	{
-	}
-
-	/**
-	 * 
-	 * @param newVal
-	 */
-	function setanimal($newVal)
-	{
-		$this->animal = $newVal;
-	}
-
-}
+	
+		
+	}	
+	/*$link = mysql_connect("127.0.0.1","root");
+	if ($link) {
+		mysql_select_db("constructora", $link);
+		//echo "conectado";
+	}else{
+			echo 'no se conecto';
+	}*/
 ?>

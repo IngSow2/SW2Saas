@@ -1,91 +1,96 @@
-<?php
+<?php 
+	require_once("../conexion/conexion.php");
+	class ActividadD{
 
-
-/**
- * @author Jc
- * @version 1.0
- * @created 21-jun-2016 08:10:32 p.m.
- */
-class ActividadD
-{
-
-	var $conexion;
+		var $nombre;
+		var $tipo;
+		var $unidad;
+		var $conexion;
 	var $m_conexion;
-	var $nombre;
-	var $tipo;
-	var $unidad;
 
-	function ActividadD()
-	{
-	}
+		public function __construct(){
+			$this->nombre="";
+			$this->tipo="";
+			$this->unidad="";
+			$this->conexion=conexion::getConexion();
+		}
+
+		public function getNombre(){
+			return $this->nombre;
+		}
+
+		public function setNombre($nombre){
+			$this->nombre=$nombre;
+		}
 
 
+		public function getTipo(){
+			return $this->tipo;
+		}
 
-	function __construct()
-	{
-	}
+		public function setTipo($tipo){
+			$this->tipo=$tipo;
+		}
 
-	function getNombre()
-	{
-	}
+		public function getUnidad(){
+			return $this->unidad;
+		}
 
-	function getTipo()
-	{
-	}
+		public function setUnidad($unidad){
+			$this->unidad=$unidad;
+		}
 
-	function getUnidad()
-	{
-	}
+		public function guardar($nombre,$tipo,$unidad){
+			$this->setNombre($nombre);
+			$this->setTipo($tipo);
+			$this->setUnidad($unidad);
+			$this->guardar1();
+		}
 
-	/**
-	 * 
-	 * @param nombre
-	 * @param tipo
-	 * @param unidad
-	 */
-	function guardar($nombre, $tipo, $unidad)
-	{
-	}
+		public function guardar1(){
+			$query='insert into actividad values (null,"'
+				.$this->getTipo().'","'
+				.$this->getNombre().'","'
+				.$this->getUnidad().'");';
+			$this->conexion->consulta($query);
+			//$resultado=mysql_query($query);
+		}
 
-	function guardar1()
-	{
-	}
+		public function listar(){//devuelve un array con todos los datos
+			$query='select * from actividad';
+			$resultado=$this->conexion->consulta($query);
+			//$resultado=mysql_query($query);
+			$proyectos=array();
+			if($resultado!=NULL){
+				if(mysql_fetch_row($resultado)>0){
+					$i=0;
+					//$resultado=$this->conexion->consulta($query);
+					$resultado=mysql_query($query);
+					while ($res=mysql_fetch_array($resultado)) {
+						$proyectos[$i]=array('id'=>$res['id'],'nombre'=>$res['nombre'],'tipo'=>$res['tipo'],'unidad'=>$res['unidad']);
+						$i=$i+1;
+					}
+				}
+			}
+			return $proyectos;
+		}
 
-	function listar()
-	{
-	}
+		public function obtenerNombre_IdActividad($idActividad){
+			$query='select nombre from actividad where id='.$idActividad;
+			$resultado=$this->conexion->consulta($query);
+			//$resultado=mysql_query($query);
+			$nombre;
+			if($resultado!=NULL){
+				if(mysql_fetch_row($resultado)>0){
+					//$resultado=$this->conexion->consulta($query);
+					$resultado=mysql_query($query);
+					while ($res=mysql_fetch_array($resultado)) {
+						$nombre=$res['nombre'];	
+					}
+				}
+			}
+			return $nombre;
+		}
 
-	/**
-	 * 
-	 * @param idActividad
-	 */
-	function obtenerNombre_IdActividad($idActividad)
-	{
-	}
-
-	/**
-	 * 
-	 * @param nombre
-	 */
-	function setNombre($nombre)
-	{
-	}
-
-	/**
-	 * 
-	 * @param tipo
-	 */
-	function setTipo($tipo)
-	{
-	}
-
-	/**
-	 * 
-	 * @param unidad
-	 */
-	function setUnidad($unidad)
-	{
-	}
-
-}
-?>
+	};
+ ?>		

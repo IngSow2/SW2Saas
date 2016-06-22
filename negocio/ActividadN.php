@@ -1,56 +1,34 @@
-<?php
+<?php 
+	require_once("../datos/actividadD.php");
+	require_once("../negocio/itemN.php");
+	class ActividadN{
 
+		private $actividadD;
+		private $itemN; 
 
-/**
- * @author Jc
- * @version 1.0
- * @created 21-jun-2016 08:10:32 p.m.
- */
-class ActividadN
-{
+		public function __construct(){
+			$this->actividadD = new ActividadD(); 
+			$this->itemN = new ItemN();
+		}
 
-	var $actividadD;
-	var $itemN;
+		public function guardarActividad($nombre,$tipo,$unidad){
+			$this->actividadD->guardar($nombre,$tipo,$unidad);
+		}
 
-	function ActividadN()
-	{
-	}
+		public function listaActividad(){
+			$lista=$this->actividadD->listar();
+			return $lista;
+		}
 
+		public function obtenerNombre_IdActividad($idActividad){
+			return $this->actividadD->obtenerNombre_IdActividad($idActividad);
+		}
 
+		public function listaItem_IdProyecto($id_proyecto){
+			return $this->itemN->listaItem_IdProyecto($id_proyecto);
+		}
 
-	function __construct()
-	{
-	}
+	};
 
-	/**
-	 * 
-	 * @param nombre
-	 * @param tipo
-	 * @param unidad
-	 */
-	function guardarActividad($nombre, $tipo, $unidad)
-	{
-	}
-
-	function listaActividad()
-	{
-	}
-
-	/**
-	 * 
-	 * @param id_proyecto
-	 */
-	function listaItem_IdProyecto($id_proyecto)
-	{
-	}
-
-	/**
-	 * 
-	 * @param idActividad
-	 */
-	function obtenerNombre_IdActividad($idActividad)
-	{
-	}
-
-}
+	
 ?>
